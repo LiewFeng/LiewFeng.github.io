@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html>
+<meta property='og:title' content="Timestep Embedding Tells: It's Time to Cache for Video Diffusion Model"/>
+<meta property='og:description' content="Timestep Embedding Tells: It's Time to Cache for Video Diffusion Model"/>
+<meta property='og:url' content='https://LiewFeng.github.io/TeaCache/'/>
+<meta property='og:image:width' content='1200' />
+<meta property='og:image:height' content='663' />
+<!-- TYPE BELOW IS PROBABLY: 'website' or 'article' or look on https://ogp.me/#types -->
+<meta property="og:type" content='website'/>
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+        content="Timestep Embedding Tells: It's Time to Cache for Video Diffusion Model">
+  <meta name="keywords" content="Timestep Embedding Tells: It's Time to Cache for Video Diffusion Model">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Timestep Embedding Tells: It's Time to Cache for Video Diffusion Model</title>
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/tab_gallery.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="icon" href="./static/images/favicon.svg">
+  <link rel="stylesheet" href="juxtapose/css/juxtapose.css">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+  <script src="./static/js/magnifier.js"></script>
+  <link href="https://fonts.cdnfonts.com/css/menlo" rel="stylesheet">
+  <link rel="stylesheet" href="./static/css/image_card_fader.css">
+  <link rel="stylesheet" href="./static/css/image_card_slider.css">
+  <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css?family=Patrick+Hand|Google+Sans|Noto+Sans|Castoro|Lato|Open+Sans&effect=shadow-multiple|emboss|3d"> 
+  <link rel="icon" href="./static/images/pyramid.png" type="image/x-icon">
+  <link rel="shortcut icon" href="./static/images/pyramid.png" type="image/x-icon">
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+
+<style>
+  @import url('https://fonts.cdnfonts.com/css/menlo');
+
+  .video-table td, .video-table th {
+    padding-top: 2px;
+    padding-bottom: 2px;
+    padding-left: 4px;
+    padding-right: 4px;
+    font-weight: normal;
+  }
+  .first-col {
+    width: 7%;
+    vertical-align: middle;
+  }
+  .other-col {
+    width: 31%;
+  }
+  body {
+    font-family: "Lato", sans-serif;
+    font-size: 1.1em;
+  }
+  .title.is-3 {
+    font-weight: 900;
+    font-size: 2.0rem;
+  }
+  .title.is-4 {
+    font-weight: 700;
+    font-size: 1.7rem;
+  }
+  .custom-emoji {
+    width: 1em;
+    height: 1em;
+    display: inline-block;
+    background-image: url('./static/images/pyramid.png');
+    background-size: cover;
+    vertical-align: middle;
+    line-height: 1;
+}
+
+</style>
+
+
+<body>
+
+  <section class="hero is-small">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <br><br>
+          <h1 class="title is-2 publication-title" style="font-size: 2.12rem">
+            Timestep Embedding Tells: It's Time to Cache for Video Diffusion Model
+          </h1>
+        
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">
+              <a href="https://liewfeng.github.io" target="_blank">Feng Liu</a><sup>1</sup><sup>*</sup>,&nbsp;
+            </span>
+            <span class="author-block">
+              <a href="https://scholar.google.com.hk/citations?user=ZO3OQ-8AAAAJ" target="_blank">Shiwei Zhang</a><sup>2</sup>,&nbsp;
+            </span>
+            <span class="author-block">
+              <a href="https://jeffwang987.github.io" target="_blank">Xiaofeng Wang</a><sup>1,3</sup>,&nbsp;
+            </span>
+            <span class="author-block">
+              <a href="https://weilllllls.github.io" target="_blank">Yujie Wei</a><sup>4</sup>,&nbsp;
+            </span>
+            <span class="author-block">
+              <a href="http://haonanqiu.com" target="_blank">Haonan Qiu</a><sup>5</sup>
+            </span>
+            <br>
+            <span class="author-block">
+              <a href="https://callsys.github.io/zhaoyuzhong.github.io-main" target="_blank">Yuzhong Zhao</a><sup>1</sup>,&nbsp;
+            </span>
+            <span class="author-block">
+              <a href="https://scholar.google.com.sg/citations?user=16RDSEUAAAAJ" target="_blank">Yingya Zhang</a><sup>2</sup>,&nbsp;
+            </span>
+            <span class="author-block">
+              <a href="https://scholar.google.com/citations?user=tjEfgsEAAAAJ&hl=en&oi=ao" target="_blank">Qixiang Ye</a><sup>1</sup>,&nbsp;
+            </span>
+            <span class="author-block">
+              <a href="https://scholar.google.com/citations?user=0IKavloAAAAJ&hl=en&oi=ao" target="_blank">Fang Wan</a><sup>1</sup><sup>†</sup>
+            </span>
+          </div>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block"><sup>1</sup>University of Chinese Academy of Sciences,&nbsp;</span>
+            <span class="author-block"><sup>2</sup>Alibaba Group</span>
+            <br>
+            <span class="author-block"><sup>3</sup>Institute of Automation, Chinese Academy of Sciences</span>
+            <br>
+            <span class="author-block"><sup>4</sup>Fudan University,&nbsp;</span>
+            <span class="author-block"><sup>5</sup>Nanyang Technological University</span>
+          </div>
+
+
+          <div class="is-size-5 publication-authors">
+            (* Work was done during internship at Alibaba Group. † Corresponding author.)
+          </div>
+
+          <!-- <div class="is-size-5 publication-venue">
+            in XXX
+          </div> -->
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <!-- Code Link. -->
+              <span class="link-block">
+                <a href="https://github.com/LiewFeng/TeaCache" target="_blank"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code</span>
+                  </a>
+              </span>
+              <!-- paper -->
+              <span class="link-block">
+                <a href="https://www.arxiv.org/abs/2408.12588" class="external-link button is-normal is-rounded is-dark" target="_blank">
+                  <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>Paper</span>
+                </a>
+              </span>
+              <!-- bibtex -->
+              <span class="link-block">
+                <a href="#bibtex"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="ai ai-obp"></i>
+                  </span>
+                  <span>BibTex</span>
+                </a>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+  <!-- Teaser video-->
+  <section class="hero teaser">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+      <br>
+        <img src="./static/images/tisser.png"
+          alt="MY ALT TEXT" />
+        </h2>
+        <span style="font-size: 0.8em; width: 100%; display: inline-block;">Figure 1:  Comparison of visual quality and efficiency (denoted by latency) with the competing method.</span>
+      </div>
+      <!-- </div> -->
+    </div>
+  </section>
+  <!-- End teaser video -->
+
+  <!-- Paper abstract -->
+  <section class="section hero is-light">
+    <div class="hero-body">
+      <div class="container is-max-desktop is-centered has-text-centered">
+        <!-- <div class="columns is-centered has-text-centered"> -->
+        <!-- <div class="column is-four-fifths"> -->
+        <h2 class="title is-3">Abstract</h2>
+        <!-- <h2 class="title is-3">Abstract</h2> -->
+        <div class="content has-text-justified">
+          <p>
+            As a fundamental backbone for video generation, diffusion models are challenged by low inference speed due to the sequential nature of denoising. 
+            Previous methods speed up the models by caching and reusing model outputs at uniformly selected timesteps. 
+            However, such a strategy neglects the fact that differences among model outputs are not uniform across timesteps, which hinders selecting the appropriate model outputs to cache, leading to a poor balance between inference efficiency and visual quality. 
+            In this study, we introduce Timestep Embedding Aware Cache (TeaCache), a training-free caching approach that estimates and leverages the fluctuating differences among model outputs across timesteps. 
+            Rather than directly using the time-consuming model outputs, TeaCache focuses on model inputs, which have a strong correlation with the modeloutputs while incurring negligible computational cost. 
+            TeaCache first modulates the noisy inputs using the timestep embeddings to ensure their differences better approximating those of model outputs. 
+            TeaCache then introduces a rescaling strategy to refine the estimated differences and utilizes them to indicate output caching. 
+            Experiments show that TeaCache achieves up to 4.41x acceleration over Open-Sora-Plan with negligible (-0.07% Vbench score) degradation of visual quality.
+          </p>
+        </div>
+        <!-- </div> -->
+        <!-- </div> -->
+      </div>
+    </div>
+  </section>
+  <!-- End paper abstract -->
+
+
+  
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3">Timestep Embedding Aware Cache (TeaCache)</h2>
+        
+        <h2 class="title is-4">Motivation</h2>
+        <div class="content has-text-justified">
+          <p>
+            Outputs of diffusion model are similar between the consecutive timesteps when denoising and previous methods propose to reduce redundancy by caching model outputs in a uniform way. However, the output difference between consecutive
+             timesteps varies. Thus, the uniform caching strategy lacks flexibility to maximize the cache utilization. A better caching strategy is to reuse the cached output more frequently when difference between cached output and the current 
+             output is small. Unfortunately, such difference is not predictable before the current output is computed. To conquer this challenge, TeaCache leverages the following prior: There exists a strong correlation between a model's inputs and
+             outputs.
+          </p>
+          <div class="content has-text-centered">
+            <img src="./static/images/timestep_embedding.png" style="width: 100%;"><br>
+            <span style="font-size: 0.8em; width: 100%; display: inline-block;">Figure 2: Timestep embedding modulates the magnitude of block input and
+              output thus has the potential to indicate the variation of output.</span>
+          </div>
+
+          <div class="content has-text-centered">
+            <img src="./static/images/difference.png" style="width: 100%;"><br>
+            <span style="font-size: 0.8em; width: 100%; display: inline-block;">Figure 3: Visualization of input differences and output differences in consecutive timesteps of Open Sora, Latte, and OpenSora-Plan.</span>
+          </div>
+        </div>
+
+        <h2 class="title is-4">Implementation</h2>
+        <div class="content has-text-justified">
+          <p>
+            Our study reveals two key observations of attention mechanisms in video diffusion transformers: Firstly, the difference
+             of outputs exhibit distinct patterns across various models. In Open Sora, the pattern forms a 'U' shape, whereas 
+            in Latte and OpenSora-Plan, it resembles a horizontally flipped 'L'. Additionally, OpenSora-Plan features multiple 
+            peaks because its scheduler samples certain timesteps twice. Secondly, the noisy input across consecutive timesteps changes 
+            minimally and shows little correlation with the model output. In contrast, both the timestep embedding and the timestep 
+            embedding modulated noisy input demonstrate a strong correlation with the model output across multiple models.
+          </p>
+          <div class="content has-text-centered">
+            <img src="./static/images/framework.png"><br>
+            <span style="font-size: 0.8em; width: 100%; display: inline-block;">Figure 4: TeaCache
+              is capable of selectively caching informative intermediate model outputs during the inference process.</span>
+          </div>
+          <div class="content has-text-justified">
+            Building on these insights, we propose the Timestep Embedding Aware Cache
+            (TeaCache). Rather than computing new outputs at each timestep, we reuse 
+            cached outputs from previous informative timesteps. The informative 
+            timesteps are selected by leveraging the difference of timestep embedding 
+            or timestep embedding modulated noisy input. Further, to reduce the estimation error 
+            between model output difference and timestep embedding difference, we apply polynomial 
+            fitting to rescale timestep embedding difference.
+          </div>
+        </div>
+        <div class="content has-text-centered">
+          <img src="./static/images/rescaled_difference.png" style="width: 100%;"><br>
+          <span style="font-size: 0.8em; width: 100%; display: inline-block;">Figure 5: Visualization of corelation of rescaled input differences and output differences in consecutive timesteps.</span>
+        </div>
+
+        
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3">Evaluations</h2>
+        
+        <h2 class="title is-4">Quantitative Results</h2>
+        <div class="content has-text-centered">
+          <img src="./static/images/performance.png">
+        </div>
+      </div>
+    </div>
+
+    
+    <h2 class="title is-4">Visual Results</h2>
+    <div class="container is-max-desktop">
+
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; place-items: center; font-size: 1.2em;">
+        <div>Open-Sora, 44.56s</div>
+        <div>PAB, 31.85</div>
+        <div>TeaCache, 28.78s</div>
+      </div>
+      <video class="video" autoplay controls muted loop playsinline>
+        <source src="./static/videos/opensora_show.mp4" type="video/mp4">
+      </video>
+      <span style="font-size: 1.5em; width: 100%; display: inline-block; text-align: center;">Open-Sora, 51-frame, 480P.</span>
+      <br>
+      <br>
+      
+
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; place-items: center; font-size: 1.2em;">
+        <div>Latte, 26.90s</div>
+        <div>PAB, 19.98s</div>
+        <div>TeaCache, 14.46s</div>
+      </div>
+      <video class="video" autoplay controls muted loop playsinline>
+        <source src="./static/videos/latte_show.mp4" type="video/mp4">
+      </video>
+      <span style="font-size: 1.5em; width: 100%; display: inline-block; text-align: center;">Latte, 16-frame, 512x512.</span>
+      <!-- <video class="video" autoplay controls muted loop playsinline>
+        <source src="./static/videos/video2.mp4" type="video/mp4">
+      </video>
+      <video class="video" autoplay controls muted loop playsinline>
+        <source src="./static/videos/video3.mp4" type="video/mp4">
+      </video> -->
+      <br>
+    </div>
+  </div>
+  <br>
+
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-full-width">        
+        <div class="content has-text-justified">
+          <h2 class="title is-4">Quality-lantency Trade-off</h2>
+          <div class="content has-text-centered">
+            <img src="./static/images/trade_off.png" style="width: 100%;"><br>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <br>
+
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-full-width">        
+        <div class="content has-text-justified">
+          <h2 class="title is-4">Scaling to multiple GPUs</h2>
+          <div class="content has-text-centered">
+            <img src="./static/images/multi_gpu.png" style="width: 100%;"><br>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <br>
+
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-full-width">        
+        <div class="content has-text-justified">
+          <h2 class="title is-4">Performance at different resolutions and lengths</h2>
+          <div class="content has-text-centered">
+            <img src="./static/images/multi_reso.png" style="width: 100%;"><br>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <br>
+
+</section>
+
+<!-- <section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title"><a id="bibtex">BibTeX</a></h2>
+    <pre><code>@misc{zhao2024pab,
+      title={Timestep Embedding Tells: It's Time to Cache for Video Diffusion Model},
+      author={Xuanlei Zhao and Xiaolong Jin and Kai Wang and Yang You},
+      year={2024},
+      eprint={2408.12588},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV},
+      url={https://arxiv.org/abs/2408.12588},
+}</code></pre>
+  </div>
+</section> -->
+
+
+<footer class="footer">
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+          <p>
+            This website is licensed under a <a rel="license"
+                                                href="http://creativecommons.org/licenses/by-sa/4.0/">Creative
+            Commons Attribution-ShareAlike 4.0 International License</a>.
+          </p>
+          <p>
+            Website adapted from the following <a href="https://nerfies.github.io">source code</a>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+<script src="juxtapose/js/juxtapose.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"></script>    
+
+</body>
+</html>
