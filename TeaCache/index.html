@@ -160,16 +160,16 @@
                   </a>
               </span>
               <!-- paper -->
-              <span class="link-block">
+              <!-- <span class="link-block">
                 <a href="https://www.arxiv.org/abs/2408.12588" class="external-link button is-normal is-rounded is-dark" target="_blank">
                   <span class="icon">
                       <i class="fas fa-file-pdf"></i>
                   </span>
                   <span>Paper</span>
                 </a>
-              </span>
+              </span> -->
               <!-- bibtex -->
-              <span class="link-block">
+              <!-- <span class="link-block">
                 <a href="#bibtex"
                    class="external-link button is-normal is-rounded is-dark">
                   <span class="icon">
@@ -177,7 +177,7 @@
                   </span>
                   <span>BibTex</span>
                 </a>
-              </span>
+              </span> -->
             </div>
           </div>
         </div>
@@ -314,7 +314,7 @@
 
       <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; place-items: center; font-size: 1.2em;">
         <div>Open-Sora, 44.56s</div>
-        <div>PAB, 31.85</div>
+        <div>PAB, 31.85s</div>
         <div>TeaCache, 28.78s</div>
       </div>
       <video class="video" autoplay controls muted loop playsinline>
@@ -334,13 +334,17 @@
         <source src="./static/videos/latte_show.mp4" type="video/mp4">
       </video>
       <span style="font-size: 1.5em; width: 100%; display: inline-block; text-align: center;">Latte, 16-frame, 512x512.</span>
-      <!-- <video class="video" autoplay controls muted loop playsinline>
-        <source src="./static/videos/video2.mp4" type="video/mp4">
-      </video>
-      <video class="video" autoplay controls muted loop playsinline>
-        <source src="./static/videos/video3.mp4" type="video/mp4">
-      </video> -->
       <br>
+      <br>
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; place-items: center; font-size: 1.2em;">
+        <div>Open-Sora-Plan, 99.65s</div>
+        <div>PAB, 73.41s</div>
+        <div>TeaCache, 22.62s</div>
+      </div>
+      <video class="video" autoplay controls muted loop playsinline>
+        <source src="./static/videos/opensora_plan_show.mp4" type="video/mp4">
+      </video>
+      <span style="font-size: 1.5em; width: 100%; display: inline-block; text-align: center;">Open-Sora, 51-frame, 480P.</span>
     </div>
   </div>
   <br>
